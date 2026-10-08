@@ -109,14 +109,22 @@ function updateStats(productCount){
  document.getElementById('statOrders').textContent='0';
  document.getElementById('statPending').textContent='0';
 }
+let adminCheckRunning=false;
 async function checkAdmin(){
- const {data}=await supabaseClient.auth.getUser();
- if(data.user?.app_metadata?.role==='admin'){
-   document.getElementById('login').hidden=true;
-   document.getElementById('app').hidden=false;
-   loadProducts();
- }else{
-   await supabaseClient.auth.signOut();
+ if(adminCheckRunning)return;
+ adminCheckRunning=true;
+ try{
+   const {data}=await supabaseClient.auth.getUser();
+   if(data.user?.app_metadata?.role==='admin'){
+     document.getElementById('login').hidden=true;
+     document.getElementById('app').hidden=false;
+     loadProducts();
+   }else{
+     document.getElementById('login').hidden=false;
+     document.getElementById('app').hidden=true;
+   }
+ }finally{
+   adminCheckRunning=false;
  }
 }
 async function login(){
@@ -130,11 +138,13 @@ async function login(){
    msg.textContent='Incorrect admin email or password.';
    return;
  }
- checkAdmin();
+ await checkAdmin();
 }
 async function logout(){
  await supabaseClient.auth.signOut();
- location.reload();
+ document.getElementById('app').hidden=true;
+ document.getElementById('login').hidden=false;
+ document.getElementById('loginMsg').textContent='';
 }
 let selectedImageFiles=Array(6).fill(null);
 function chooseImageCard(index){document.getElementById('imageFile_'+index)?.click()}
@@ -195,7 +205,10 @@ async function deleteProduct(id){
 }
 function escapeHtml(v){return String(v).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
 renderImageCards();
-supabaseClient.auth.onAuthStateChange(()=>checkAdmin());
+supabaseClient.auth.onAuthStateChange((event,session)=>{
+ if(event==='SIGNED_IN' && session?.user)checkAdmin();
+ if(event==='SIGNED_OUT'){document.getElementById('app').hidden=true;document.getElementById('login').hidden=false;}
+});
 checkAdmin();
 </script>
 </body>
