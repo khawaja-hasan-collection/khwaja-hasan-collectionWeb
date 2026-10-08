@@ -168,7 +168,7 @@ async function addProduct(){
    if(error)throw error;
    msg.textContent='Product added successfully. The image is now live on the storefront.';
    ['name','price','oldPrice','image','tag','description'].forEach(id=>document.getElementById(id).value='');
-   document.getElementById('imageFile').value='';
+   document.querySelectorAll('#imageCards input[type="file"]').forEach(input=>input.value='');
    selectedImageFiles=Array(6).fill(null);
    renderImageCards();
    loadProducts();
