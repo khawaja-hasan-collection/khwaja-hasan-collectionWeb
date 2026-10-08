@@ -55,7 +55,7 @@ h1,h2{margin-top:0}.form{display:grid;grid-template-columns:repeat(2,1fr);gap:12
 <div class="statCard"><div class="statLabel">Orders</div><div class="statValue" id="statOrders">0</div></div>
 <div class="statCard"><div class="statLabel">Pending Orders</div><div class="statValue" id="statPending">0</div></div>
 </div>
-<div class="card"><h2>Quick Overview</h2><p class="muted">Use the left sidebar to add products, manage products, or exit the admin dashboard.</p></div>
+<div class="card"><h2>Products</h2><p class="muted">Recently added products — these are the same products shown live on the homepage.</p><div id="dashboardProducts"><p class="muted">Loading...</p></div></div>
 </section>
 <section id="add" class="sectionView">
 <div class="card">
@@ -102,7 +102,7 @@ function showSection(id,btn){
 function exitDashboard(){logout()}
 function toggleMenu(){document.getElementById('topMenu')?.classList.toggle('open')}
 function toggleSidebar(){document.querySelector('.sidebar')?.classList.toggle('open');document.getElementById('sidebarOverlay')?.classList.toggle('open')}
-async async function goHome(){document.querySelector('.sidebar')?.classList.remove('open');document.getElementById('sidebarOverlay')?.classList.remove('open');try{await supabaseClient.auth.signOut()}finally{location.href='./index.html'}}
+async function goHome(){document.querySelector('.sidebar')?.classList.remove('open');document.getElementById('sidebarOverlay')?.classList.remove('open');try{await supabaseClient.auth.signOut()}finally{location.href='./index.html'}}
 function updateStats(productCount){
  document.getElementById('statProducts').textContent=productCount;
  document.getElementById('statUsers').textContent='0';
@@ -184,7 +184,8 @@ async function loadProducts(){
  const {data,error}=await supabaseClient.from('products').select('*').order('created_at',{ascending:false});
  if(error){box.innerHTML='<p class="muted">Could not load products.</p>';return}
  updateStats((data||[]).length);
- box.innerHTML=data.length?data.map(p=>`<div class="row"><div style="display:flex;align-items:center;gap:12px">${p.image_url?`<img class="thumb" src="${p.image_url}" alt="${escapeHtml(p.name)}">`:'<div class="thumb"></div>'}<div><b>${escapeHtml(p.name)}</b><div class="muted">${escapeHtml(p.category)} · ₹${Number(p.price).toLocaleString('en-IN')}</div></div></div><button class="danger" onclick="deleteProduct('${p.id}')">Delete</button></div>`).join(''):'<p class="muted">No products added yet.</p>';
+ const html=data.length?data.map(p=>`<div class="row"><div style="display:flex;align-items:center;gap:12px">${p.image_url?`<img class="thumb" src="${p.image_url}" alt="${escapeHtml(p.name)}">`:'<div class="thumb"></div>'}<div><b>${escapeHtml(p.name)}</b><div class="muted">${escapeHtml(p.category)} · ₹${Number(p.price).toLocaleString('en-IN')}</div></div></div><button class="danger" onclick="deleteProduct('${p.id}')">Delete</button></div>`).join(''):'<p class="muted">No products added yet.</p>';box.innerHTML=html;const dash=document.getElementById('dashboardProducts');if(dash)dash.innerHTML=data.length?data.slice(0,8).map(p=>`<div class="row"><div style="display:flex;align-items:center;gap:12px">${p.image_url?`<img class="thumb" src="${p.image_url}" alt="${escapeHtml(p.name)}">`:'<div class="thumb"></div>'}<div><b>${escapeHtml(p.name)}</b><div class="muted">${escapeHtml(p.category)} · ₹${Number(p.price).toLocaleString('en-IN')}</div></div></div></div>`).join(''):'<p class="muted">No products added yet.</p>';
+
 }
 async function deleteProduct(id){
  if(!confirm('Delete this product?'))return;
