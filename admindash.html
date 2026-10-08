@@ -7,17 +7,19 @@
 <style>
 :root{--bg:#f5f6f8;--card:#fff;--text:#172033;--muted:#697386;--border:#e1e5eb;--dark:#121212;--gold:#f3bd39;--danger:#c43d3d}
 *{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--text)}
-header{background:var(--dark);color:#fff;padding:18px 5vw;display:flex;justify-content:space-between;align-items:center}
+header{background:var(--dark);color:#fff;padding:10px 5vw;display:flex;justify-content:space-between;align-items:center}
+.brand{display:flex;align-items:center;gap:10px}.brandLogo{width:46px;height:46px;flex:none}.brandText{font-size:18px;font-weight:700}
 header b{font-size:18px}button,input,select{font:inherit}.logout{border:1px solid #fff;background:transparent;color:#fff;padding:9px 14px;border-radius:5px;cursor:pointer}
 main{max-width:1100px;margin:35px auto;padding:0 20px}.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:24px;margin-bottom:20px}
 h1,h2{margin-top:0}.form{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.form input,.form select{padding:12px;border:1px solid var(--border);border-radius:6px;background:#fff}.primary{grid-column:1/-1;padding:12px;border:0;border-radius:6px;background:var(--dark);color:#fff;font-weight:700;cursor:pointer}
 .row{display:flex;justify-content:space-between;align-items:center;gap:15px;padding:14px 0;border-top:1px solid var(--border)}.row:first-child{border-top:0}.danger{border:0;background:var(--danger);color:#fff;padding:8px 12px;border-radius:5px;cursor:pointer}.muted{color:var(--muted);font-size:14px}
 #login{max-width:420px;margin:12vh auto}.error{color:var(--danger);min-height:20px}
-@media(max-width:650px){.form{grid-template-columns:1fr}.primary{grid-column:auto}.row{align-items:flex-start;flex-direction:column}}
+@media(max-width:650px){.form{grid-template-columns:1fr}.primary{grid-column:auto}.row{align-items:flex-start;flex-direction:column}.brandText{font-size:15px}.brandLogo{width:40px;height:40px}}
 </style>
 </head>
 <body>
 <div id="login" class="card">
+<div class="brand" style="margin-bottom:18px"><svg class="brandLogo" viewBox="0 0 100 100" aria-label="KHC logo"><path d="M18 36L28 20L38 30L50 14L62 30L72 20L82 36" fill="none" stroke="#f3bd39" stroke-width="5"/><text x="50" y="67" text-anchor="middle" fill="#f3bd39" font-family="Georgia,serif" font-size="31" font-weight="700">KHC</text><path d="M20 76Q50 61 80 76" fill="none" stroke="#f3bd39" stroke-width="3"/></svg><div class="brandText">Khawaja Hasan Collection</div></div>
 <h1>Admin Login</h1>
 <p class="muted">Khawaja Hasan Collection administration</p>
 <div class="form">
@@ -29,7 +31,7 @@ h1,h2{margin-top:0}.form{display:grid;grid-template-columns:repeat(2,1fr);gap:12
 </div>
 
 <div id="app" hidden>
-<header><b>Khawaja Hasan Collection — Admin Dashboard</b><button class="logout" onclick="logout()">Logout</button></header>
+<header><div class="brand"><svg class="brandLogo" viewBox="0 0 100 100" aria-label="KHC logo"><path d="M18 36L28 20L38 30L50 14L62 30L72 20L82 36" fill="none" stroke="#f3bd39" stroke-width="5"/><text x="50" y="67" text-anchor="middle" fill="#f3bd39" font-family="Georgia,serif" font-size="31" font-weight="700">KHC</text><path d="M20 76Q50 61 80 76" fill="none" stroke="#f3bd39" stroke-width="3"/></svg><b>Khawaja Hasan Collection — Admin Dashboard</b></div><button class="logout" onclick="logout()">Logout</button></header>
 <main>
 <section class="card">
 <h2>Add Product</h2>
