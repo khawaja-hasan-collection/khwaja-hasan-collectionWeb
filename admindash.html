@@ -10,9 +10,11 @@
 header{background:var(--dark);color:#fff;padding:10px 5vw;display:flex;justify-content:space-between;align-items:center}
 .brand{display:flex;align-items:center;gap:10px}.brandLogo{width:46px;height:46px;flex:none}.brandText{font-size:18px;font-weight:700}.brandText span{color:#f0bc35}.adminLabel{font-size:11px;color:#bbb;letter-spacing:.12em;margin-top:3px}
 header b{font-size:18px}button,input,select{font:inherit}.logout{border:1px solid #fff;background:transparent;color:#fff;padding:9px 14px;border-radius:5px;cursor:pointer}
-main{max-width:1100px;margin:35px auto;padding:0 20px}.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:24px;margin-bottom:20px}
-h1,h2{margin-top:0}.form{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.form input,.form select{padding:12px;border:1px solid var(--border);border-radius:6px;background:#fff}.primary{grid-column:1/-1;padding:12px;border:0;border-radius:6px;background:var(--dark);color:#fff;font-weight:700;cursor:pointer}
+main{margin:0;padding:28px 32px 50px 300px}.layout{min-height:calc(100vh - 67px)}.sidebar{position:fixed;left:0;top:67px;bottom:0;width:260px;background:#171717;color:#fff;padding:24px 16px;z-index:10}.sideTitle{font-size:12px;letter-spacing:.14em;color:#aaa;margin:0 12px 14px}.sideNav{display:grid;gap:8px}.sideNav button{width:100%;text-align:left;border:0;background:transparent;color:#fff;padding:13px 14px;border-radius:7px;cursor:pointer;font-weight:700}.sideNav button:hover,.sideNav button.active{background:#2a2a2a;color:#f3bd39}.dashboardGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:22px}.statCard{background:#fff;border:1px solid var(--border);border-radius:10px;padding:20px}.statLabel{color:var(--muted);font-size:13px}.statValue{font-size:30px;font-weight:800;margin-top:8px}.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:24px;margin-bottom:20px}.sectionView{display:none}.sectionView.active{display:block}
+h1,h2{margin-top:0}.form{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.form input,.form select,.form textarea{padding:12px;border:1px solid var(--border);border-radius:6px;background:#fff}.form textarea{min-height:100px;grid-column:1/-1;resize:vertical}.primary{grid-column:1/-1;padding:12px;border:0;border-radius:6px;background:var(--dark);color:#fff;font-weight:700;cursor:pointer}
 .row{display:flex;justify-content:space-between;align-items:center;gap:15px;padding:14px 0;border-top:1px solid var(--border)}.row:first-child{border-top:0}.danger{border:0;background:var(--danger);color:#fff;padding:8px 12px;border-radius:5px;cursor:pointer}.muted{color:var(--muted);font-size:14px}
+@media(max-width:900px){main{padding:24px 18px 40px 18px}.sidebar{position:static;width:auto;padding:10px 12px}.sideNav{grid-template-columns:repeat(4,1fr)}.sideNav button{font-size:12px;padding:10px}.layout{min-height:0}.dashboardGrid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:650px){.form{grid-template-columns:1fr}.primary{grid-column:auto}.row{align-items:flex-start;flex-direction:column}.brandText{font-size:15px}.brandLogo{width:40px;height:40px}.dashboardGrid{grid-template-columns:1fr 1fr}.sideNav{grid-template-columns:1fr 1fr}}
 #login{max-width:420px;margin:12vh auto}.error{color:var(--danger);min-height:20px}.fileBox{display:flex;flex-direction:column;gap:8px}.fileBox input[type=file]{padding:10px;border:1px solid var(--border);border-radius:6px;background:#fff}.preview{display:none;width:100%;height:150px;object-fit:cover;border-radius:7px;border:1px solid var(--border);background:#f5f1e9}.thumb{width:62px;height:62px;object-fit:cover;border-radius:7px;border:1px solid var(--border);background:#f5f1e9}
 @media(max-width:650px){.form{grid-template-columns:1fr}.primary{grid-column:auto}.row{align-items:flex-start;flex-direction:column}.brandText{font-size:15px}.brandLogo{width:40px;height:40px}}
 </style>
@@ -32,8 +34,30 @@ h1,h2{margin-top:0}.form{display:grid;grid-template-columns:repeat(2,1fr);gap:12
 
 <div id="app" hidden>
 <header><div class="brand"><svg class="brandLogo" viewBox="0 0 220 220" aria-label="Khawaja Hasan Collection logo" role="img"><defs><linearGradient id="kgHeader" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff0a0"/><stop offset=".45" stop-color="#d6a62b"/><stop offset="1" stop-color="#fff1a8"/></linearGradient></defs><g fill="none" stroke="url(#kgHeader)" stroke-width="6" stroke-linejoin="round"><path d="M55 62 Q42 48 54 31 Q68 16 82 35 Q94 14 110 35 Q126 14 139 34 Q157 48 143 63"/><path d="M48 68 Q110 35 172 68"/></g><text x="110" y="132" text-anchor="middle" fill="url(#kgHeader)" font-family="Georgia,serif" font-size="76" font-weight="700">KHC</text><path d="M42 142 Q110 92 178 142" fill="none" stroke="url(#kgHeader)" stroke-width="7"/><text x="110" y="171" text-anchor="middle" fill="url(#kgHeader)" font-family="Georgia,serif" font-size="18" font-weight="700" letter-spacing="2">KHAWAJA HASAN</text><path d="M34 190H77 M143 190H186" stroke="url(#kgHeader)" stroke-width="4"/><text x="110" y="198" text-anchor="middle" fill="url(#kgHeader)" font-family="Georgia,serif" font-size="11" letter-spacing="3">COLLECTION</text></svg><div><b>KHAWAJA <span>HASAN</span></b><div class="adminLabel">ADMIN DASHBOARD</div></div></div><button class="logout" onclick="logout()">Logout</button></header>
+<div class="layout">
+<aside class="sidebar">
+<p class="sideTitle">ADMIN MENU</p>
+<nav class="sideNav">
+<button id="navHome" class="active" onclick="showSection('home',this)">⌂ Home</button>
+<button onclick="showSection('add',this)">＋ Add Product</button>
+<button onclick="showSection('manage',this)">▣ Manage Product</button>
+<button onclick="exitDashboard()">↪ Exit</button>
+</nav>
+</aside>
 <main>
-<section class="card">
+<section id="home" class="sectionView active">
+<h1>Dashboard</h1>
+<p class="muted">Khawaja Hasan Collection — store overview</p>
+<div class="dashboardGrid">
+<div class="statCard"><div class="statLabel">Total Products</div><div class="statValue" id="statProducts">0</div></div>
+<div class="statCard"><div class="statLabel">Users</div><div class="statValue" id="statUsers">0</div></div>
+<div class="statCard"><div class="statLabel">Orders</div><div class="statValue" id="statOrders">0</div></div>
+<div class="statCard"><div class="statLabel">Pending Orders</div><div class="statValue" id="statPending">0</div></div>
+</div>
+<div class="card"><h2>Quick Overview</h2><p class="muted">Use the left sidebar to add products, manage products, or exit the admin dashboard.</p></div>
+</section>
+<section id="add" class="sectionView">
+<div class="card">
 <h2>Add Product</h2>
 <p class="muted">Products added here are stored in Supabase and can appear on the storefront.</p>
 <div class="form">
@@ -43,16 +67,21 @@ h1,h2{margin-top:0}.form{display:grid;grid-template-columns:repeat(2,1fr);gap:12
 <input id="oldPrice" type="number" min="0" placeholder="Old price">
 <div class="fileBox"><input id="imageFile" type="file" accept="image/*" onchange="previewImage(event)"><input id="image" placeholder="Or paste image URL"><img id="imagePreview" class="preview" alt="Product image preview"></div>
 <input id="tag" placeholder="Tag (New, Bestseller...)">
+<textarea id="description" placeholder="Product description"></textarea>
 <button class="primary" onclick="addProduct()">Add Product</button>
 </div>
 <p id="msg" class="muted"></p>
+</div>
 </section>
-
-<section class="card">
-<h2>Products</h2>
+<section id="manage" class="sectionView">
+<div class="card">
+<h2>Manage Product</h2>
+<p class="muted">View and delete products currently stored in Supabase.</p>
 <div id="products"><p class="muted">Loading...</p></div>
+</div>
 </section>
 </main>
+</div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -62,6 +91,20 @@ const supabaseClient=window.supabase.createClient(
 'sb_publishable_qQSSmPQQ9tPyx_4g8D1Guw_AmP4N41a'
 );
 
+function showSection(id,btn){
+ document.querySelectorAll('.sectionView').forEach(x=>x.classList.remove('active'));
+ document.getElementById(id)?.classList.add('active');
+ document.querySelectorAll('.sideNav button').forEach(x=>x.classList.remove('active'));
+ btn?.classList.add('active');
+ if(id==='manage')loadProducts();
+}
+function exitDashboard(){logout()}
+function updateStats(productCount){
+ document.getElementById('statProducts').textContent=productCount;
+ document.getElementById('statUsers').textContent='0';
+ document.getElementById('statOrders').textContent='0';
+ document.getElementById('statPending').textContent='0';
+}
 async function checkAdmin(){
  const {data}=await supabaseClient.auth.getUser();
  if(data.user?.app_metadata?.role==='admin'){
@@ -103,6 +146,7 @@ async function addProduct(){
  let image=document.getElementById('image').value.trim();
  const file=document.getElementById('imageFile').files?.[0];
  const tag=document.getElementById('tag').value.trim()||'New';
+ const description=document.getElementById('description').value.trim();
  const msg=document.getElementById('msg');
  if(!name||!price){msg.textContent='Name and price are required.';return}
  msg.textContent='Adding product...';
@@ -116,11 +160,11 @@ async function addProduct(){
      image=supabaseClient.storage.from('product-images').getPublicUrl(path).data.publicUrl;
    }
    const {error}=await supabaseClient.from('products').insert({
-     name,category,price,old_price:oldPrice,tag,image_url:image||null,active:true
+     name,category,price,old_price:oldPrice,tag,image_url:image||null,description,active:true
    });
    if(error)throw error;
    msg.textContent='Product added successfully. The image is now live on the storefront.';
-   ['name','price','oldPrice','image','tag'].forEach(id=>document.getElementById(id).value='');
+   ['name','price','oldPrice','image','tag','description'].forEach(id=>document.getElementById(id).value='');
    document.getElementById('imageFile').value='';
    document.getElementById('imagePreview').style.display='none';
    document.getElementById('imagePreview').removeAttribute('src');
@@ -133,6 +177,7 @@ async function loadProducts(){
  const box=document.getElementById('products');
  const {data,error}=await supabaseClient.from('products').select('*').order('created_at',{ascending:false});
  if(error){box.innerHTML='<p class="muted">Could not load products.</p>';return}
+ updateStats((data||[]).length);
  box.innerHTML=data.length?data.map(p=>`<div class="row"><div style="display:flex;align-items:center;gap:12px">${p.image_url?`<img class="thumb" src="${p.image_url}" alt="${escapeHtml(p.name)}">`:'<div class="thumb"></div>'}<div><b>${escapeHtml(p.name)}</b><div class="muted">${escapeHtml(p.category)} · ₹${Number(p.price).toLocaleString('en-IN')}</div></div></div><button class="danger" onclick="deleteProduct('${p.id}')">Delete</button></div>`).join(''):'<p class="muted">No products added yet.</p>';
 }
 async function deleteProduct(id){
