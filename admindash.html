@@ -102,7 +102,7 @@ function showSection(id,btn){
 function exitDashboard(){logout()}
 function toggleMenu(){document.getElementById('topMenu')?.classList.toggle('open')}
 function toggleSidebar(){document.querySelector('.sidebar')?.classList.toggle('open');document.getElementById('sidebarOverlay')?.classList.toggle('open')}
-async function goHome(){document.querySelector('.sidebar')?.classList.remove('open');document.getElementById('sidebarOverlay')?.classList.remove('open');try{await supabaseClient.auth.signOut()}finally{location.href='./index.html'}}
+async async function goHome(){document.querySelector('.sidebar')?.classList.remove('open');document.getElementById('sidebarOverlay')?.classList.remove('open');try{await supabaseClient.auth.signOut()}finally{location.href='./index.html'}}
 function updateStats(productCount){
  document.getElementById('statProducts').textContent=productCount;
  document.getElementById('statUsers').textContent='0';
