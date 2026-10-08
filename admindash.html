@@ -190,6 +190,7 @@ async function deleteProduct(id){
  loadProducts();
 }
 function escapeHtml(v){return String(v).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+renderImageCards();
 supabaseClient.auth.onAuthStateChange(()=>checkAdmin());
 checkAdmin();
 </script>
