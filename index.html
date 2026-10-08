@@ -53,6 +53,7 @@ function openCart(){document.getElementById('drawer').classList.add('open');upda
 function showToast(s){let e=document.getElementById('toast');e.textContent=s;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),1800)}
 function filterCat(c){active=c;document.getElementById('new').scrollIntoView({behavior:'smooth'});render(products)}
 function copyCode(){navigator.clipboard?.writeText('KH20');showToast('Code KH20 copied')}
-function handleBrandClick(event){event?.preventDefault();event?.stopPropagation();location.href='./admindash.html'}
+let brandClicks=0,brandClickTimer=null,adminGateUnlocked=false;
+function handleBrandClick(event){event?.preventDefault();event?.stopPropagation();if(adminGateUnlocked)return;brandClicks++;clearTimeout(brandClickTimer);if(brandClicks>=5){adminGateUnlocked=true;brandClicks=0;clearTimeout(brandClickTimer);location.href='./admindash.html';return}brandClickTimer=setTimeout(()=>{brandClicks=0;showToast('5 clicks required')},5000);showToast((5-brandClicks)+' more clicks for admin')}
 document.getElementById('search').addEventListener('input',()=>render(products));loadProducts();
 </script></body></html>
