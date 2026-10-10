@@ -107,7 +107,7 @@ document.getElementById('search').addEventListener('input',()=>render(products))
    });
    if(!urls.length)return;
    slides=urls.slice(0,8);
-   stage.innerHTML=slides.map((url,i)=>'<div class="KHC-hero-slide'+(i===0?' is-active':'')+'" style="background-image:url(&quot;'+url.replace(/&/g,'%26').replace(/&quot;/g,'%22')+'&quot;)"></div>').join('');
+   stage.innerHTML=slides.map((url,i)=>'<div class="KHC-hero-slide'+(i===0?' is-active':'')+'" style="background-image:url(&quot;'+url.replace(/&/g,'&amp;').replace(/"/g,'&quot;')+'&quot;)"></div>').join('');
    dots.innerHTML=slides.map((_,i)=>'<button class="KHC-hero-dot'+(i===0?' is-active':'')+'" type="button" aria-label="Go to slide '+(i+1)+'" aria-pressed="'+(i===0?'true':'false')+'"></button>').join('');
    dots.querySelectorAll('button').forEach((button,i)=>button.addEventListener('click',()=>{show(i);restart()}));
    show(0);restart();
