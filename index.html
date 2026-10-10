@@ -31,6 +31,24 @@
 
 </style>
 
+
+<style>
+/* Homepage hero image slider */
+.hero{isolation:isolate;background:#21180f;transition:background-color .3s}
+.hero:before{content:"";position:absolute;inset:0;z-index:0;background-image:var(--hero-slide-image);background-size:cover;background-position:center 38%;background-repeat:no-repeat;transition:opacity .45s ease}
+.hero:after{z-index:0;background:linear-gradient(90deg,rgba(0,0,0,.78),rgba(0,0,0,.32) 58%,rgba(0,0,0,.12))}
+.heroText{z-index:1}
+.heroSliderControls{position:absolute;z-index:3;right:5vw;bottom:24px;display:flex;align-items:center;gap:9px}
+.heroSliderControls button{display:grid;place-items:center;border:1px solid #ffffffa8;background:#171717a8;color:#fff;cursor:pointer;backdrop-filter:blur(5px)}
+.heroSliderControls .heroArrow{width:42px;height:42px;border-radius:50%;font-size:26px;line-height:1}
+.heroSliderControls .heroArrow:hover{background:#f3bd39;color:#171717;border-color:#f3bd39}
+.heroSliderDots{display:flex;gap:7px;align-items:center;margin:0 5px}
+.heroSliderDots .heroDot{width:8px;height:8px;border-radius:20px;padding:0;transition:width .2s,background .2s}
+.heroSliderDots .heroDot.active{width:24px;background:#f3bd39;border-color:#f3bd39}
+@media(max-width:560px){.hero:before{background-position:center}.hero:after{background:linear-gradient(90deg,rgba(0,0,0,.75),rgba(0,0,0,.28))}.heroSliderControls{right:18px;bottom:18px;gap:6px}.heroSliderControls .heroArrow{width:36px;height:36px}.heroSliderDots{gap:5px}}
+@media(prefers-reduced-motion:reduce){.hero:before{transition:none}}
+</style>
+
 </head>
 <body>
 <div class="app">
@@ -128,6 +146,54 @@ document.getElementById('search').addEventListener('input',()=>render(products))
    });
    show(0);restart();
  }).catch(()=>{});
+})();
+</script>
+
+
+<script>
+/* Homepage hero slider: cycles through product photos, with curated fallbacks. */
+(function(){
+ const hero=document.querySelector('.hero');
+ const track=document.getElementById('products');
+ if(!hero)return;
+ const fallback=[
+  'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1920&q=85',
+  'https://images.unsplash.com/photo-1597983073493-88cd35cf93b0?auto=format&fit=crop&w=1920&q=85',
+  'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=1920&q=85'
+ ];
+ let slides=[],index=0,timer=null;
+ const controls=document.createElement('div');
+ controls.className='heroSliderControls';
+ controls.innerHTML='<button class="heroArrow" type="button" aria-label="Previous banner">‹</button><div class="heroSliderDots" aria-label="Choose banner"></div><button class="heroArrow" type="button" aria-label="Next banner">›</button>';
+ hero.appendChild(controls);
+ const dots=controls.querySelector('.heroSliderDots');
+ function show(n){
+  if(!slides.length)return;
+  index=(n+slides.length)%slides.length;
+  hero.style.setProperty('--hero-slide-image','url("'+slides[index].replace(/"/g,'%22')+'")');
+  dots.querySelectorAll('button').forEach((b,i)=>{b.classList.toggle('active',i===index);b.setAttribute('aria-current',i===index?'true':'false')});
+ }
+ function start(){clearInterval(timer);if(slides.length>1)timer=setInterval(()=>show(index+1),5000)}
+ function setup(){
+  const seen=new Set(),images=[];
+  if(typeof products!=='undefined'&&Array.isArray(products))products.forEach(p=>{
+   [p.image,...(Array.isArray(p.images)?p.images:[]),...(Array.isArray(p.image_urls)?p.image_urls:[])].forEach(src=>{
+    if(typeof src==='string'&&(src.startsWith('https://')||src.startsWith('http://'))&&!seen.has(src)){seen.add(src);images.push(src)}
+   });
+  });
+  slides=images.length?images.slice(0,8):fallback;
+  dots.innerHTML='';
+  slides.forEach((_,i)=>{const b=document.createElement('button');b.type='button';b.className='heroDot';b.setAttribute('aria-label','Show banner '+(i+1));b.addEventListener('click',()=>{show(i);start()});dots.appendChild(b)});
+  show(Math.min(index,slides.length-1));start();
+ }
+ controls.querySelectorAll('.heroArrow')[0].addEventListener('click',()=>{show(index-1);start()});
+ controls.querySelectorAll('.heroArrow')[1].addEventListener('click',()=>{show(index+1);start()});
+ setup();
+ if(track){const observer=new MutationObserver(()=>{if(typeof products!=='undefined'&&products.some(p=>p.image||p.images?.length||p.image_urls?.length)){setup();observer.disconnect()}});observer.observe(track,{childList:true,subtree:true});setTimeout(()=>observer.disconnect(),15000)}
+ hero.addEventListener('mouseenter',()=>clearInterval(timer));
+ hero.addEventListener('mouseleave',start);
+ hero.addEventListener('focusin',()=>clearInterval(timer));
+ hero.addEventListener('focusout',start);
 })();
 </script>
 
