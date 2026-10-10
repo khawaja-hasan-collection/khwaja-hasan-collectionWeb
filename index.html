@@ -77,7 +77,7 @@ function handleBrandClick(event){event?.preventDefault();event?.stopPropagation(
 document.getElementById('search').addEventListener('input',()=>render(products));loadProducts();
 </script>
 <script>
-/* Load the hero's slides from active product images; all other homepage content stays unchanged. */
+/* Homepage hero slider: safely render images from active Supabase products. */
 (function(){
  const hero=document.getElementById('KHC-hero-slider');
  if(!hero||!window.supabaseClient)return;
@@ -97,21 +97,37 @@ document.getElementById('search').addEventListener('input',()=>render(products))
  next.addEventListener('click',()=>{show(current+1);restart()});
  hero.addEventListener('mouseenter',()=>{if(timer)clearInterval(timer)});
  hero.addEventListener('mouseleave',restart);
+ let touchX=0;
+ hero.addEventListener('touchstart',e=>{touchX=e.changedTouches[0]?.clientX||0},{passive:true});
+ hero.addEventListener('touchend',e=>{const endX=e.changedTouches[0]?.clientX||0;if(Math.abs(endX-touchX)>45){show(current+(endX<touchX?1:-1));restart()}},{passive:true});
  window.supabaseClient.from('products').select('name,image_url,image_urls').eq('active',true).order('created_at',{ascending:false}).then(({data,error})=>{
    if(error||!Array.isArray(data))return;
-   const urls=[];data.forEach(p=>{
+   const urls=[];
+   data.forEach(p=>{
      let gallery=Array.isArray(p.image_urls)?p.image_urls:[];
-     if(typeof p.image_urls==='string'){try{gallery=JSON.parse(p.image_urls)}catch(e){gallery=[]}}
-     const all=[p.image_url,...gallery];
-     all.forEach(url=>{if(typeof url==='string'&&/^https?:\/\//i.test(url)&&!urls.includes(url))urls.push(url)});
+     if(typeof p.image_urls==='string'){try{const parsed=JSON.parse(p.image_urls);gallery=Array.isArray(parsed)?parsed:[]}catch(e){gallery=[]}}
+     [p.image_url,...gallery].forEach(url=>{if(typeof url==='string'&&/^https?:\/\//i.test(url)&&!urls.includes(url))urls.push(url)});
    });
    if(!urls.length)return;
    slides=urls.slice(0,8);
-   stage.innerHTML=slides.map((url,i)=>'<div class="KHC-hero-slide'+(i===0?' is-active':'')+'" style="background-image:url(&quot;'+url.replace(/&/g,'&amp;').replace(/"/g,'&quot;')+'&quot;)"></div>').join('');
-   dots.innerHTML=slides.map((_,i)=>'<button class="KHC-hero-dot'+(i===0?' is-active':'')+'" type="button" aria-label="Go to slide '+(i+1)+'" aria-pressed="'+(i===0?'true':'false')+'"></button>').join('');
-   dots.querySelectorAll('button').forEach((button,i)=>button.addEventListener('click',()=>{show(i);restart()}));
+   stage.replaceChildren();
+   slides.forEach((url,i)=>{
+     const slide=document.createElement('div');
+     slide.className='KHC-hero-slide'+(i===0?' is-active':'');
+     const img=document.createElement('img');
+     img.src=url;img.alt='Khawaja Hasan Collection featured fashion';img.loading=i===0?'eager':'lazy';
+     img.style.cssText='width:100%;height:100%;object-fit:cover;display:block';
+     slide.appendChild(img);stage.appendChild(slide);
+   });
+   dots.replaceChildren();
+   slides.forEach((_,i)=>{
+     const dot=document.createElement('button');
+     dot.type='button';dot.className='KHC-hero-dot'+(i===0?' is-active':'');
+     dot.setAttribute('aria-label','Go to slide '+(i+1));dot.setAttribute('aria-pressed',i===0?'true':'false');
+     dot.addEventListener('click',()=>{show(i);restart()});dots.appendChild(dot);
+   });
    show(0);restart();
- });
+ }).catch(()=>{});
 })();
 </script>
 
