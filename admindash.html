@@ -134,7 +134,11 @@ function handleAdminLogoClick(event){
    adminSecurityClicks=0;
    clearTimeout(adminSecurityTimer);
    document.getElementById('securityGate').hidden=true;
-   document.getElementById('loginFields').hidden=false;
+   document.getElementById('securityGate').style.display='none';
+   const fields=document.getElementById('loginFields');
+   fields.hidden=false;
+   fields.style.display='block';
+   document.getElementById('securityMsg').textContent='Security verified — enter admin login';
    document.getElementById('email').focus();
  }
 }
